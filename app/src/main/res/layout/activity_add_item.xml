@@ -52,15 +52,19 @@
         android:background="@android:color/transparent"
         android:layout_below="@+id/name_et"
         android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp" />
+        android:layout_marginRight="4dp"
+        android:layout_above="@+id/selectDateBtn" />
 
     <Button
         android:id="@+id/selectDateBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/map"
         android:layout_centerHorizontal="true"
-        android:text="Button" />
+        android:text="Select Date" />
 
 </RelativeLayout>
 
