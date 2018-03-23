@@ -101,6 +101,9 @@ public class ListAndHistoryActivity extends AppCompatActivity {
     final ArrayList<ListItem> todoListHistory = new ArrayList<>();
     final CustomAdapter listAdapterHistory = new CustomAdapter(todoListHistory);
 
+    public static boolean editMode = false;
+    public static ListItem todoItem;
+
     ListView listViewCurrent;
     ListView listViewHistory;
 
@@ -128,6 +131,7 @@ public class ListAndHistoryActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                editMode = false;
                 startActivity(new Intent(ListAndHistoryActivity.this, AddItemActivity.class));
             }
         });
@@ -162,14 +166,21 @@ public class ListAndHistoryActivity extends AppCompatActivity {
         listViewCurrent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(ListAndHistoryActivity.this, todoListCurrent.get(position).name, Toast.LENGTH_SHORT).show();
+
+                editMode = true;
+                todoItem = todoListCurrent.get(position);
+                startActivity(new Intent(ListAndHistoryActivity.this, AddItemActivity.class));
+
             }
         });
 
         listViewHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(ListAndHistoryActivity.this, todoListHistory.get(position).name, Toast.LENGTH_SHORT).show();
+
+                editMode = true;
+                todoItem = todoListHistory.get(position);
+                startActivity(new Intent(ListAndHistoryActivity.this, AddItemActivity.class));
             }
         });
 
