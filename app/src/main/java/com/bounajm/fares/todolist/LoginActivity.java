@@ -9,9 +9,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -37,8 +35,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public static boolean connected;
 
-    public static boolean loggedIn = false;
-
     private static final String TAG = "EmailPassword";
 
     private EditText emailET, passwordET;
@@ -59,7 +55,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError error) {
-                System.err.println("xxx Listener was cancelled");
             }
         });
 
@@ -73,12 +68,24 @@ public class LoginActivity extends AppCompatActivity {
         passwordET = (EditText) findViewById(R.id.et_password);
     }
 
+    public static boolean isLoggedin(){
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public static String userID(){
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if(isLoggedin()){
+            return FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }else{
+            return "";
+        }
     }
 
     public static void setOnline(){
-        if(loggedIn){
+        if(isLoggedin()){
             Query query = myRef.child(userID()).child("numbers");
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -109,20 +116,21 @@ public class LoginActivity extends AppCompatActivity {
 //    }
 
     private void afterLogin(){
-        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() != null){
-                    loggedIn = true;
-                    setOnline();
-                    startActivity(new Intent(LoginActivity.this, ListAndHistoryActivity.class));
-                    finish();
-                }else{
-                    loggedIn = false;
-                    startActivity(new Intent(LoginActivity.this, LoginActivity.class));
-                }
-            }
-        });
+
+        setOnline();
+        startActivity(new Intent(LoginActivity.this, ListAndHistoryActivity.class));
+        finish();
+
+//        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                if(firebaseAuth.getCurrentUser() != null){
+//                    loggedIn = true;
+//                }else{
+//                    loggedIn = false;
+//                }
+//            }
+//        });
     }
 
     public void getDatabase() {
@@ -169,9 +177,6 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        //showProgressDialog();
-
-        // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

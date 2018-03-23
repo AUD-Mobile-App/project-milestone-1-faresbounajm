@@ -64,6 +64,7 @@ public class ListAndHistoryActivity extends AppCompatActivity {
 
         if(item.getItemId() == R.id.logout){
             FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(ListAndHistoryActivity.this, LoginActivity.class));
             finish();
         }
         return true;
@@ -94,18 +95,14 @@ public class ListAndHistoryActivity extends AppCompatActivity {
 
     final ArrayList<ListItem> todoListAll = new ArrayList<>();
 
-    final ArrayList<String> keysCurrent = new ArrayList<>();
     final ArrayList<ListItem> todoListCurrent = new ArrayList<>();
     final CustomAdapter listAdapterCurrent = new CustomAdapter(todoListCurrent);
 
-    final ArrayList<String> keysHistory = new ArrayList<>();
     final ArrayList<ListItem> todoListHistory = new ArrayList<>();
     final CustomAdapter listAdapterHistory = new CustomAdapter(todoListHistory);
 
     ListView listViewCurrent;
     ListView listViewHistory;
-
-    final ArrayList<String> keys = new ArrayList<>();
 
     boolean current = true;
 
